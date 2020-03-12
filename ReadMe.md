@@ -3,8 +3,8 @@
 Excelファイルにある請求書データからPDFフォーマットの請求書を生成する。  
 
 ## 実行環境
-ExcelがインストールされているWindows OS PC
-Python3 Windows版
+ExcelがインストールされているWindows OS PC  
+Python3 Windows版  
 PowerShellまたはコマンドプロンプトを管理者権限で立ち上げて実行する
 
 ## ファイル  
