@@ -22,8 +22,19 @@ class TestInvoice(unittest.TestCase):
     
     def test_is_invoice_exist(self):
         iv_data = invoice_util.get_excel_data(self.ws)
-        self.assertEqual(invoice_util.is_invoice_exist(iv_data, 1), True)
-        self.assertEqual(invoice_util.is_invoice_exist(iv_data, 5), False)
+        invoices = []
+        for row in iv_data:
+            id = row[1]
+            exist_invoice = invoice_util.get_invoice_from_list(invoices, id)
+            if not exist_invoice:
+                invoice_data = Invoice(row)
+                invoice_data.add_detail(InvoiceDetail(row))
+                invoices.append(invoice_data)
+            else:
+                exist_invoice.add_detail(InvoiceDetail(row))
+
+        self.assertEqual(invoice_util.is_invoice_exist(invoices, 1), True)
+        self.assertEqual(invoice_util.is_invoice_exist(invoices, 5), False)
 
     def test_add_detail(self):
         iv_data = invoice_util.get_excel_data(self.ws)
@@ -37,10 +48,13 @@ class TestInvoice(unittest.TestCase):
         invoices = []
         for row in iv_data:
             id = row[1]
-            if not invoices or not invoice_util.get_invoice_from_list(invoices, id):
+            exist_invoice = invoice_util.get_invoice_from_list(invoices, id)
+            if not exist_invoice:
                 invoice_data = Invoice(row)
+                invoice_data.add_detail(InvoiceDetail(row))
                 invoices.append(invoice_data)
-                invoice_data.add_detail(row)
+            else:
+                exist_invoice.add_detail(InvoiceDetail(row))
 
         iv1 = invoice_util.get_invoice_from_list(invoices, 2)
         self.assertEqual(iv1.title, "PC USBケーブル")

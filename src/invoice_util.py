@@ -68,7 +68,7 @@ def get_excel_data(ws):
 # 請求書データ存在チェック
 def is_invoice_exist(invoice_data, id):
     for row in invoice_data:
-        if row[1] == id:
+        if row.id == id:
             return(True)
     return(False)
 
