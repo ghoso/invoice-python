@@ -4,7 +4,7 @@
 import datetime
 import pathlib
 
-# 定数
+# 請求書項目セル位置
 INVOICE_HEADER_ROW = 3
 INVOICE_COL = 15
 COMPANY_NAME_ROW = 3
@@ -87,7 +87,7 @@ def create_invoice_pdf(app, wb, ws, invoice, pdf_output_path="../pdf"):
     iv_doc = wb.Sheets(wb.Sheets.Count)
     iv_doc.Name = 'invoice_work'
 
-    # 請求書作成
+    # 請求書データ設定
     iv_doc.Cells(COMPANY_NAME_ROW, COMPANY_NAME_COL).Value = invoice.company_name
     iv_doc.Cells(PERSONNEL_ROW, PERSONNEL_COL).Value = invoice.personnel
     iv_doc.Cells(INVOICE_ID_ROW, INVOICE_ID_COL).Value = invoice.id
@@ -95,6 +95,7 @@ def create_invoice_pdf(app, wb, ws, invoice, pdf_output_path="../pdf"):
     iv_doc.Cells(TODAY_ROW, TODAY_COL).Value = pdate_to_str(today_date)
     iv_doc.Cells(TITLE_ROW, TITLE_COL).Value = invoice.title
     iv_doc.Cells(DUE_DATE_ROW, DUE_DATE_COL).Value = invoice.due_date
+    # 請求書詳細データ設定
     detail_row = DETAIL_START_ROW
     i = 0
     for iv_item in invoice.invoice_details:
