@@ -19,7 +19,13 @@ class TestInvoice(unittest.TestCase):
     def test_get_excel_data(self):
         iv_data = invoice_util.get_excel_data(self.ws)
         self.assertEqual(iv_data[0][3],"XXX株式会社")
-    
+
+    def test_check_excel_data(self):
+        good_data = [[1, 1, 1, 'XXX株式会社', '山田', '増設ハードディスク', 'HDD', 1240000, 10, 124000, None, None, None, None]]
+        bad_data = [[2, 2, None, 'XXX株式会社', '山田', '増設ハードディスク', 'HDD', 1240000, 10, 124000, None, None, None, None]]
+        self.assertEqual(invoice_util.check_excel_data(good_data), good_data)
+        self.assertEqual(invoice_util.check_excel_data(bad_data), [])
+
     def test_is_invoice_exist(self):
         iv_data = invoice_util.get_excel_data(self.ws)
         invoices = []

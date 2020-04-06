@@ -4,6 +4,18 @@
 import datetime
 import pathlib
 
+# Excelデータインデックス
+EXCEL_NO = 0
+EXCEL_INVOICE_NO  = 1
+EXCEL_CUSTOMER_ID = 2
+EXCEL_CUSTOMER_NAME = 3
+EXCEL_CUSTOMER_PERSONNEL = 4
+EXCEL_INVOICE_TITLE = 5
+EXCEL_ITEM = 6
+EXCEL_UNIT_PRICE = 7
+EXCEL_UNIT_NUM = 8
+EXCEL_PRICE = 9
+
 # 請求書項目セル位置
 INVOICE_HEADER_ROW = 3
 INVOICE_COL = 15
@@ -40,7 +52,25 @@ def excel_date_to_str(excel_date):
     pdate_str = pdate_to_str(pdate)
     return(pdate_str)
 
+# Excelデータチェック
+def check_excel_data(data):
+    if data == None or len(data) == 0:
+        return None
+    i = 0
+    for row in data:
+        for col in row[EXCEL_NO:EXCEL_PRICE]:
+            if not col:
+                del(data[i])
+                break
+        i+= 1
+
+    return data
+
 # 請求書データをエクセルシートから取得 
+# invoice_data = [[1,1,”XXX株式会社”,"山田","増設ハードディスク",...],
+#                 [2,2,”ABCコーポレーション”,"竹内","PC USBケーブル",...],
+#                 ...
+#                ]
 def get_excel_data(ws):
     invoice_data = [[0]]
     nrows = ws.UsedRange.Rows.Count
@@ -63,7 +93,8 @@ def get_excel_data(ws):
             continue
         break
     invoice_data.pop(-1)
-    return(invoice_data)
+    checked_data = check_excel_data(invoice_data)
+    return(checked_data)
 
 # 請求書データ存在チェック
 def is_invoice_exist(invoice_data, id):
